@@ -1,0 +1,481 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AutoMarket Kenya — Premium Cars</title>
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #151515;
+    --card: #1c1c1c;
+    --gold: #d4af37;
+    --gold-light: #f4d47c;
+    --white: #ffffff;
+    --gray: #8a8a8a;
+    --border: #2a2a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; }
+  .logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; font-size: 0.95rem; }
+  .nav-links a:hover { color: var(--gold); }
+  .cart-btn {
+    background: var(--gold); color: var(--black);
+    padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)),
+      url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80') center/cover;
+    padding: 3rem 1rem;
+  }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 1rem; }
+  .hero h1 span { color: var(--gold); }
+  .hero p { color: #ddd; max-width: 600px; margin: 0 auto 2rem; font-size: 1.1rem; }
+
+  .search-bar {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    background: rgba(28,28,28,0.9);
+    padding: 0.75rem; border-radius: 12px;
+    max-width: 900px; width: 100%; margin: 0 auto;
+    border: 1px solid var(--border);
+  }
+  .search-bar input, .search-bar select {
+    flex: 1; min-width: 140px;
+    background: var(--black); color: var(--white);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.75rem 1rem; font-size: 0.95rem;
+    outline: none;
+  }
+  .search-bar input:focus, .search-bar select:focus { border-color: var(--gold); }
+  .search-bar button {
+    background: var(--gold); color: var(--black);
+    padding: 0.75rem 1.75rem; border-radius: 8px;
+    font-weight: 700;
+  }
+  .search-bar button:hover { background: var(--gold-light); }
+
+  /* SECTIONS */
+  section { padding: 3rem 2rem; max-width: 1300px; margin: 0 auto; }
+  .section-title { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  .section-title span { color: var(--gold); }
+  .section-sub { color: var(--gray); margin-bottom: 2rem; }
+
+  /* CATEGORIES */
+  .categories { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .cat-btn {
+    background: var(--card); color: var(--white);
+    padding: 0.6rem 1.25rem; border-radius: 50px;
+    border: 1px solid var(--border);
+    font-size: 0.9rem; transition: all 0.2s;
+  }
+  .cat-btn:hover, .cat-btn.active {
+    background: var(--gold); color: var(--black);
+    border-color: var(--gold); font-weight: 700;
+  }
+
+  /* CAR GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(212,175,55,0.15);
+    border-color: var(--gold);
+  }
+  .card-img {
+    height: 190px; background-size: cover; background-position: center;
+    position: relative;
+  }
+  .card-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--gold); color: var(--black);
+    padding: 0.25rem 0.6rem; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+  }
+  .card-body { padding: 1rem 1.15rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .card-price { color: var(--gold); font-size: 1.25rem; font-weight: 800; margin-bottom: 0.6rem; }
+  .card-specs {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    color: var(--gray); font-size: 0.8rem; margin-bottom: 1rem;
+  }
+  .card-specs span::after { content: ' •'; margin-left: 0.4rem; color: var(--border); }
+  .card-specs span:last-child::after { content: ''; }
+  .card-actions { display: flex; gap: 0.5rem; margin-top: auto; }
+  .btn {
+    padding: 0.55rem 1rem; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 700; transition: all 0.2s;
+  }
+  .btn-gold { background: var(--gold); color: var(--black); }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-ghost { background: transparent; color: var(--gray); }
+  .btn-ghost:hover { color: var(--gold); }
+  .btn-flex { flex: 1; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200; padding: 1rem; overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark); border: 1px solid var(--border);
+    border-radius: 16px; max-width: 900px; width: 100%;
+    max-height: 90vh; overflow-y: auto; position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(0,0,0,0.7); color: var(--white);
+    width: 36px; height: 36px; border-radius: 50%;
+    font-size: 1.2rem; z-index: 2;
+  }
+  .modal-close:hover { background: var(--gold); color: var(--black); }
+  .gallery {
+    height: 320px; background-size: cover; background-position: center;
+    border-radius: 16px 16px 0 0;
+  }
+  .gallery-thumbs {
+    display: flex; gap: 0.5rem; padding: 0.75rem 1.5rem 0;
+  }
+  .gallery-thumbs div {
+    width: 70px; height: 50px; border-radius: 6px;
+    background-size: cover; background-position: center;
+    border: 2px solid transparent; cursor: pointer;
+  }
+  .gallery-thumbs div.active { border-color: var(--gold); }
+  .modal-body { padding: 1.5rem; }
+  .modal-body h2 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+  .modal-price { color: var(--gold); font-size: 1.7rem; font-weight: 800; margin: 0.5rem 0 1rem; }
+  .spec-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem; margin: 1rem 0;
+  }
+  .spec-item {
+    background: var(--card); padding: 0.75rem 1rem;
+    border-radius: 8px; border: 1px solid var(--border);
+  }
+  .spec-item label { color: var(--gray); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .spec-item div { font-weight: 700; margin-top: 0.15rem; }
+  .desc { color: #ccc; margin: 1rem 0; }
+  .modal-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.25rem; }
+  .modal-actions .btn { padding: 0.85rem 1.5rem; font-size: 0.95rem; }
+
+  /* CHECKOUT */
+  .checkout-form { display: grid; gap: 1rem; }
+  .checkout-form label { font-size: 0.85rem; color: var(--gray); }
+  .checkout-form input, .checkout-form select {
+    width: 100%; background: var(--black); color: var(--white);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.75rem 1rem; font-size: 0.95rem; margin-top: 0.25rem;
+  }
+  .checkout-form input:focus { border-color: var(--gold); outline: none; }
+
+  /* ADMIN */
+  .admin-header {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .stat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .stat label { color: var(--gray); font-size: 0.8rem; text-transform: uppercase; }
+  .stat div { font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-top: 0.3rem; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    background: var(--gold); color: var(--black);
+    padding: 1rem 1.5rem; border-radius: 10px;
+    font-weight: 700;
+    transform: translateY(120%); transition: transform 0.3s;
+  }
+  .toast.show { transform: translateY(0); }
+
+  .empty {
+    text-align: center; padding: 4rem 1rem; color: var(--gray);
+  }
+  .empty h3 { color: var(--white); margin-bottom: 0.5rem; }
+
+  @media (max-width: 640px) {
+    nav { padding: 0.85rem 1rem; }
+    .nav-links a:not(.cart-btn) { display: none; }
+    section { padding: 2rem 1rem; }
+    .hero { min-height: 60vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Auto<span>Market</span> KE</div>
+  <div class="nav-links">
+    <a href="#" onclick="showSection('home'); return false;">Home</a>
+    <a href="#" onclick="showSection('listings'); return false;">Cars</a>
+    <a href="#" onclick="showSection('favorites'); return false;">Favorites (<span id="favCount">0</span>)</a>
+    <a href="#" onclick="showSection('admin'); return false;">Admin</a>
+    <button class="cart-btn" onclick="showSection('cart')">Cart (<span id="cartCount">0</span>)</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="home-section">
+  <div class="hero">
+    <div style="width:100%; max-width:900px; margin: 0 auto;">
+      <h1>Find Your Dream <span>Car</span> in Kenya</h1>
+      <p>Premium vehicles, verified sellers, transparent pricing. From KSh 500K to KSh 20M.</p>
+      <div class="search-bar">
+        <input id="searchBrand" placeholder="Brand (e.g. Toyota)" />
+        <input id="searchModel" placeholder="Model (e.g. Prado)" />
+        <input id="searchMaxPrice" type="number" placeholder="Max price (KSh)" />
+        <button onclick="applySearch()">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="section-title">Browse by <span>Category</span></h2>
+    <p class="section-sub">Pick your preferred body style</p>
+    <div class="categories" id="categoryFilters"></div>
+    <div class="grid" id="featuredGrid"></div>
+  </section>
+</div>
+
+<!-- LISTINGS -->
+<div id="listings-section" style="display:none">
+  <section>
+    <h2 class="section-title">All <span>Vehicles</span></h2>
+    <p class="section-sub" id="listingsCount">Loading...</p>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:0.75rem; margin-bottom:2rem">
+      <input id="filterBrand" placeholder="Brand" style="background:var(--card);color:#fff;border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem" />
+      <input id="filterMinPrice" type="number" placeholder="Min KSh" style="background:var(--card);color:#fff;border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem" />
+      <input id="filterMaxPrice" type="number" placeholder="Max KSh" style="background:var(--card);color:#fff;border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem" />
+      <select id="filterYear" style="background:var(--card);color:#fff;border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem">
+        <option value="">Any Year</option>
+      </select>
+      <select id="filterFuel" style="background:var(--card);color:#fff;border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem">
+        <option value="">Any Fuel</option>
+        <option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option>
+      </select>
+      <button class="btn btn-gold" onclick="renderListings()">Apply Filters</button>
+    </div>
+
+    <div class="grid" id="listingsGrid"></div>
+  </section>
+</div>
+
+<!-- FAVORITES -->
+<div id="favorites-section" style="display:none">
+  <section>
+    <h2 class="section-title">Your <span>Favorites</span></h2>
+    <p class="section-sub">Cars you've saved for later</p>
+    <div class="grid" id="favoritesGrid"></div>
+  </section>
+</div>
+
+<!-- CART -->
+<div id="cart-section" style="display:none">
+  <section>
+    <h2 class="section-title">Your <span>Cart</span></h2>
+    <p class="section-sub">Review your selected vehicle(s)</p>
+    <div id="cartContent"></div>
+  </section>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-section" style="display:none">
+  <section>
+    <div class="admin-header">
+      <div>
+        <h2 class="section-title">Admin <span>Dashboard</span></h2>
+        <p class="section-sub">Manage listings, prices, and inventory</p>
+      </div>
+      <button class="btn btn-gold" onclick="openAddCar()">+ Add New Vehicle</button>
+    </div>
+
+    <div class="stat-grid" id="adminStats"></div>
+
+    <h3 style="margin: 1rem 0 1rem">Vehicle Inventory</h3>
+    <div style="overflow-x:auto">
+      <table style="width:100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; min-width: 720px;">
+        <thead>
+          <tr style="background: var(--black); text-align: left;">
+            <th style="padding: 0.9rem 1rem;">Vehicle</th>
+            <th style="padding: 0.9rem 1rem;">Year</th>
+            <th style="padding: 0.9rem 1rem;">Price</th>
+            <th style="padding: 0.9rem 1rem;">Status</th>
+            <th style="padding: 0.9rem 1rem;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTable"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- CAR DETAILS MODAL -->
+<div class="modal-overlay" id="carModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('carModal')">×</button>
+    <div id="carModalContent"></div>
+  </div>
+</div>
+
+<!-- ADD/EDIT CAR MODAL -->
+<div class="modal-overlay" id="carFormModal">
+  <div class="modal" style="max-width:600px">
+    <button class="modal-close" onclick="closeModal('carFormModal')">×</button>
+    <div class="modal-body">
+      <h2 id="carFormTitle" style="margin-bottom: 1.25rem">Add Vehicle</h2>
+      <form class="checkout-form" id="carForm" onsubmit="saveCar(event)">
+        <input type="hidden" id="carId" />
+        <div><label>Title</label><input id="fTitle" required placeholder="e.g. 2022 Toyota Prado TX-L" /></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem">
+          <div><label>Brand</label><input id="fBrand" required /></div>
+          <div><label>Model</label><input id="fModel" required /></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem">
+          <div><label>Year</label><input id="fYear" type="number" required /></div>
+          <div><label>Price (KSh)</label><input id="fPrice" type="number" required /></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem">
+          <div><label>Mileage (km)</label><input id="fMileage" type="number" required /></div>
+          <div><label>Engine (cc)</label><input id="fEngine" type="number" required /></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem">
+          <div>
+            <label>Fuel</label>
+            <select id="fFuel"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select>
+          </div>
+          <div>
+            <label>Transmission</label>
+            <select id="fTransmission"><option>Automatic</option><option>Manual</option></select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem">
+          <div>
+            <label>Category</label>
+            <select id="fCategory"><option>SUV</option><option>Sedan</option><option>Hatchback</option><option>Pickup</option><option>Luxury</option></select>
+          </div>
+          <div>
+            <label>Condition</label>
+            <select id="fCondition"><option>Brand New</option><option>Foreign Used</option><option>Locally Used</option></select>
+          </div>
+        </div>
+        <div><label>Location</label><input id="fLocation" required placeholder="Nairobi" /></div>
+        <div><label>Image URL</label><input id="fImage" required placeholder="https://..." /></div>
+        <div><label>Description</label><input id="fDescription" required placeholder="Well maintained..." /></div>
+        <button type="submit" class="btn btn-gold" style="padding: 0.9rem; margin-top: 0.5rem">Save Vehicle</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   SEED DATA — realistic cars with working Unsplash images
+   ========================================================= */
+const SEED_CARS = [
+  {
+    id: 1, title: "2022 Toyota Land Cruiser Prado TX-L", brand: "Toyota", model: "Prado",
+    year: 2022, price: 8500000, mileage: 34000, fuel: "Diesel", transmission: "Automatic",
+    engine: 2800, condition: "Foreign Used", category: "SUV", location: "Nairobi",
+    description: "Immaculate Prado TX-L with full service history. Sunroof, leather seats, 360 camera.",
+    image: "https://images.unsplash.com/photo-1594502184342-2e12f877aa73?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1594502184342-2e12f877aa73?w=800&q=80",
+      "https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?w=800&q=80"
+    ],
+    status: "available"
+  },
+  {
+    id: 2, title: "2020 Mercedes-Benz C200 AMG Line", brand: "Mercedes-Benz", model: "C200",
+    year: 2020, price: 5200000, mileage: 42000, fuel: "Petrol", transmission: "Automatic",
+    engine: 1500, condition: "Foreign Used", category: "Luxury", location: "Nairobi",
+    description: "Stunning C200 AMG Line with panoramic roof and Burmester sound.",
+    image: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800&q=80",
+    images: ["https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800&q=80"],
+    status: "available"
+  },
+  {
+    id: 3, title: "2021 Subaru Forester XT", brand: "Subaru", model: "Forester",
+    year: 2021, price: 3800000, mileage: 55000, fuel: "Petrol", transmission: "Automatic",
+    engine: 2000, condition: "Locally Used", category: "SUV", location: "Nakuru",
+    description: "One owner, full Subaru Kenya service history. Perfect family SUV.",
+    image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80",
+    images: ["https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80"],
+    status: "available"
+  },
+  {
+    id: 4, title: "2019 BMW 320i M Sport", brand: "BMW", model: "320i",
+    year: 2019, price: 4100000, mileage: 61000, fuel: "Petrol", transmission: "Automatic",
+    engine: 2000, condition: "Foreign Used", category: "Sedan", location: "Mombasa",
+    description: "M Sport package, 18-inch alloys, heads-up display.",
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80",
+    images: ["https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80"],
+    status: "available"
+  },
+  {
+    id: 5, title: "2023 Ford Ranger Wildtrak", brand: "Ford", model: "Ranger",
+    year: 2023, price: 6200000, mileage: 12000, fuel: "Diesel", transmission: "Automatic",
+    engine: 2000, condition: "Brand New", category: "Pickup", location: "Nairobi",
+    description: "Brand new Wildtrak with 5-year warranty. Ready for adventure.",
+    image: "https://images.unsplash.com/photo-1551830820-330a71b99659?w=800&q=80",
+    images: ["https://images.unsplash.com/photo-1551830820-330a71b99659?w=800&q=80"],
+    status: "available"
+  },
+  {
+    id: 6, title: "2021 Volkswagen Golf GTI", brand: "Volkswagen", model: "Golf GTI",
+    year: 2021, price: 4300000, mileage: 38000, fuel: "Pe
